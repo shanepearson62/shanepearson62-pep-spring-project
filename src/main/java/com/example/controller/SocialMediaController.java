@@ -1,5 +1,24 @@
 package com.example.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.entity.Account;
+import com.example.entity.Message;
+import com.example.exception.DuplicateUsernameException;
+import com.example.exception.InvalidAccountException;
+import com.example.exception.InvalidMessageException;
+import com.example.exception.UnauthorizedException;
+import com.example.service.AccountService;
+import com.example.service.MessageService;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
@@ -7,6 +26,51 @@ package com.example.controller;
  * where applicable as well as the @ResponseBody and @PathVariable annotations. You should
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
+@RestController
+@RequestMapping("/api")
 public class SocialMediaController {
+    
+    @Autowired
+    private AccountService accountService;
 
+    @Autowired
+    private MessageService messageService;
+    
+    @PostMapping("/register")
+    public ResponseEntity<Account> register(@RequestBody Account account) {
+        try {
+            Account newAccount = accountService.createAccount(account);
+            return new ResponseEntity<>(newAccount, HttpStatus.OK);
+        } catch (DuplicateUsernameException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (InvalidAccountException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Account> login(@RequestBody Account account) {
+        try {
+            Account existingAccount = accountService.login(account);
+            return new ResponseEntity<>(existingAccount, HttpStatus.OK);
+        } catch (UnauthorizedException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/messages")
+    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
+        try {
+            Message newMessage = messageService.createMessage(message);
+            return new ResponseEntity<>(newMessage, HttpStatus.OK);
+        } catch (InvalidMessageException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/messages")
+    public ResponseEntity<List<Message>> getAllMessages() {
+        List<Message> messages = messageService.getAllMessages();
+        return new ResponseEntity<>(messages, HttpStatus.OK);
+    }
 }
