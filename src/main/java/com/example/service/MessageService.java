@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.entity.Account;
 import com.example.entity.Message;
 import com.example.exception.InvalidMessageException;
 import com.example.repository.AccountRepository;
@@ -47,14 +48,22 @@ public class MessageService {
         return 0;   // message not found
     }
 
-    /*public int updateMessageText(Integer messageId, String messageText) throws InvalidMessageException {
+    public int updateMessageText(Integer messageId, String messageText) throws InvalidMessageException {
+        Message message = messageRepository.findById(messageId).orElse(null);
+        if (message == null) {
+          throw new InvalidMessageException("Invalid message");
+        }
+
         if (messageText == null || messageText.isBlank() || messageText.length() > 255) {
             throw new InvalidMessageException("Invalid message text");
         }
-        return messageRepository.updateMessage(messageId, messageText);
+
+        message.setMessageText(messageText);
+        messageRepository.save(message);
+        return 1; // 1 message updated
     }
 
-    public List<Message> getMessagesByAccountId(Integer accountId) {
-        return messageRepository.getMessagesByAccountId(accountId);
+    /*public List<Message> getMessagesByAccount(Integer accountId) {
+        return messageRepository.findAllById(accountId);
     }*/
 }
