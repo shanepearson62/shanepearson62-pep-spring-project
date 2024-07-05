@@ -24,7 +24,7 @@ public class MessageService {
         if (message.getMessageText().isBlank() || message.getMessageText().length() > 255) {
             throw new InvalidMessageException("Invalid message text");
         }
-        if (message.getPostedBy() == null || !accountRepository.existsById((long)message.getPostedBy())) {
+        if (message.getPostedBy() == null || !accountRepository.existsById(message.getPostedBy())) {
             throw new InvalidMessageException("Posted by user does not exist");
         }
         return messageRepository.save(message);
@@ -41,7 +41,7 @@ public class MessageService {
 
     public int deleteMessageById(Integer messageId) {
         messageRepository.deleteById(messageId);
-        if(messageRepository.existsById((long)messageId)) {
+        if(messageRepository.existsById(messageId)) {
             return 0;
         }
         return 1;
@@ -55,6 +55,6 @@ public class MessageService {
     }
 
     public List<Message> getMessagesByAccountId(Integer accountId) {
-        return messageRepository.findByPostedByAccountId(accountId);
+        return messageRepository.findMessagesByPostedByAccountId(accountId);
     }
 }

@@ -7,10 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.entity.Message;
 
-public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findAll();
-    Optional<Message> findById(Integer messageId);
-    void deleteById(Integer messageId);
+public interface MessageRepository extends JpaRepository<Message, Integer> {
+    List<Message> findAllMessages();
+    Optional<Message> findMessagesById(Integer messageId);
+    void deleteMessagesById(Integer messageId);
     int updateMessageText(Integer messageId, String messageText);
-    List<Message> findByPostedByAccountId(Integer accountId);
+    List<Message> findMessagesByPostedByAccountId(Integer accountId);
 }

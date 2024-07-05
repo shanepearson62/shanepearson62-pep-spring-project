@@ -21,14 +21,14 @@ public class AccountService {
         if (account.getUsername().isBlank() || account.getPassword().length() < 4) {
             throw new InvalidAccountException("Invalid account details");
         }
-        if (accountRepository.findByUsername(account.getUsername()).isPresent()) {
+        if (accountRepository.findAccountByUsername(account.getUsername()).isPresent()) {
             throw new DuplicateUsernameException("Username already exists");
         }
         return accountRepository.save(account);
     }
 
     public Account login(Account account) throws UnauthorizedException {
-        Optional<Account> existingAccount = accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
+        Optional<Account> existingAccount = accountRepository.findAccountByUsernameAndPassword(account.getUsername(), account.getPassword());
         if (existingAccount.isPresent()) {
             return existingAccount.get();
         } else {
