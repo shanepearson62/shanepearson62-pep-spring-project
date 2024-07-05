@@ -40,11 +40,11 @@ public class MessageService {
     }
 
     public int deleteMessageById(Integer messageId) {
-        messageRepository.deleteById(messageId);
         if(messageRepository.existsById(messageId)) {
-            return 0;
+            messageRepository.deleteById(messageId);
+            return 1;   // 1 message was deleted
         }
-        return 1;
+        return 0;   // message not found
     }
 
     /*public int updateMessageText(Integer messageId, String messageText) throws InvalidMessageException {
