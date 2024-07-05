@@ -89,7 +89,7 @@ public class SocialMediaController {
         return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);
     }
 
-    @PatchMapping("/messages/{messageId}")
+    /*@PatchMapping("/messages/{messageId}")
     public ResponseEntity<Integer> updateMessageText(@PathVariable Integer messageId, @RequestBody String messageText) {
         try {
             int rowsUpdated = messageService.updateMessageText(messageId, messageText);
@@ -103,5 +103,5 @@ public class SocialMediaController {
     public ResponseEntity<List<Message>> getMessagesByAccountId(@PathVariable Integer accountId) {
         List<Message> messages = messageService.getMessagesByAccountId(accountId);
         return new ResponseEntity<>(messages, HttpStatus.OK);
-    }
+    }*/
 }

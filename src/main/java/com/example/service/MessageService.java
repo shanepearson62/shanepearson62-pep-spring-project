@@ -47,14 +47,14 @@ public class MessageService {
         return 1;
     }
 
-    public int updateMessageText(Integer messageId, String messageText) throws InvalidMessageException {
+    /*public int updateMessageText(Integer messageId, String messageText) throws InvalidMessageException {
         if (messageText == null || messageText.isBlank() || messageText.length() > 255) {
             throw new InvalidMessageException("Invalid message text");
         }
-        return messageRepository.updateMessageText(messageId, messageText);
+        return messageRepository.updateMessage(messageId, messageText);
     }
 
     public List<Message> getMessagesByAccountId(Integer accountId) {
-        return messageRepository.findMessagesByPostedByAccountId(accountId);
-    }
+        return messageRepository.getMessagesByAccountId(accountId);
+    }*/
 }
