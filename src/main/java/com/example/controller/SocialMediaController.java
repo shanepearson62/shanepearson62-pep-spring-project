@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
@@ -37,7 +38,9 @@ public class SocialMediaController {
 
     @Autowired
     private MessageService messageService;
+
     
+    // #1 Create a new Account: POST /register. The body will contain a JSON Account, but will not contain an accountId.
     @PostMapping("/register")
     public ResponseEntity<Account> register(@RequestBody Account account) {
         try {
@@ -50,6 +53,7 @@ public class SocialMediaController {
         }
     }
 
+    // #2 Verify a login: POST /login. The request body will contain a JSON representation of an Account.
     @PostMapping("/login")
     public ResponseEntity<Account> login(@RequestBody Account account) {
         try {
@@ -60,6 +64,7 @@ public class SocialMediaController {
         }
     }
 
+    // #3 Submit a new post: POST /messages. The request body will contain a JSON representation of a message, but will not contain a messageId.
     @PostMapping("/messages")
     public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         try {
@@ -70,18 +75,21 @@ public class SocialMediaController {
         }
     }
 
+    // #4 Get all messages via a GET request: GET /messages.
     @GetMapping("/messages")
     public ResponseEntity<List<Message>> getAllMessages() {
         List<Message> messages = messageService.getAllMessages();
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
+    // #5 Get a message by messageId via a GET request: GET /messages/{messageId}.
     @GetMapping("/messages/{messageId}")
     public ResponseEntity<Message> getMessageById(@PathVariable Integer messageId) {
         Message message = messageService.getMessageById(messageId);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    // #6 Delete a message by messageId via a DELETE request: DELETE /messages/{messageId}.
     @DeleteMapping("/messages/{messageId}")
     public ResponseEntity<Integer> deleteMessageById(@PathVariable Integer messageId) {
         int rowsUpdated = messageService.deleteMessageById(messageId);
@@ -92,16 +100,19 @@ public class SocialMediaController {
         }
     }
 
-    @PatchMapping("/messages/{messageId}")
-    public ResponseEntity<Integer> updateMessageText(@PathVariable Integer messageId, @RequestBody String messageText) {
+    // #7 Update a message via a PATCH request: PATCH /messages/{messageId}. 
+    // The request body has new messageText values to replace the message identified by messageId.
+    @PatchMapping("/messages/{messageId}") 
+    public ResponseEntity<Integer> updateMessageText(@PathVariable Integer messageId, @RequestBody Message message) {
         try {
-            int rowsUpdated = messageService.updateMessageText(messageId, messageText);
+            int rowsUpdated = messageService.updateMessageText(messageId, message.getMessageText());
             return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);
         } catch (InvalidMessageException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
+    // #8 Get all messages from an accountId via a GET request: GET /accounts/{accountId}/messages.
     @GetMapping("/accounts/{accountId}/messages")
     public ResponseEntity<List<Message>> getMessagesByAccountId(@PathVariable Integer accountId) {
         List<Message> messages = messageService.findMessagesByAccountId(accountId);
