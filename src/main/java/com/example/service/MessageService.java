@@ -62,6 +62,7 @@ public class MessageService {
             throw new InvalidMessageException("Invalid message text");
         }
 
+        // If it gets here, update the message text, save and return # of updated messages(1)
         message.setMessageText(messageText);
         messageRepository.save(message);
         return 1; // 1 message updated
