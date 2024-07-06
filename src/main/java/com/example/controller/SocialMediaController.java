@@ -102,9 +102,9 @@ public class SocialMediaController {
         }
     }
 
-    /*@GetMapping("/accounts/{accountId}/messages")
+    @GetMapping("/accounts/{accountId}/messages")
     public ResponseEntity<List<Message>> getMessagesByAccountId(@PathVariable Integer accountId) {
-        List<Message> messages = messageService.getMessagesByAccount(accountId);
+        List<Message> messages = messageService.findMessagesByAccountId(accountId);
         return new ResponseEntity<>(messages, HttpStatus.OK);
-    }*/
+    }
 }
